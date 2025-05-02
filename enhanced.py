@@ -20,7 +20,7 @@ st.set_page_config(page_title="ML Playground", layout="wide")
 # App title and headings
 st.title("🎯 Machine Learning Playground")
 st.write("Explore different datasets and classifiers with this interactive app!")
-
+st.write("Developed by Kanwar Hamza Shuja")
 # ========================================
 # Sidebar Controls
 # ========================================
