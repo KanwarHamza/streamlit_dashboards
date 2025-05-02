@@ -151,6 +151,58 @@ def get_classifier(model, param):
             random_state=42
         )
 
+# ========================================
+# Model Training and Evaluation
+# ========================================
+st.header("🤖 Model Training")
+
+# Get classifier
+def get_classifier(model, param):
+    if model == 'KNN':
+        return KNeighborsClassifier(n_neighbors=param['K'])
+    elif model == 'SVM':
+        return SVC(C=param['C'])
+    else:
+        return RandomForestClassifier(
+            n_estimators=param['n_estimators'], 
+            max_depth=param['max_depth'], 
+            random_state=42
+        )
+
+clf = get_classifier(model, param)
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Show Raw Data checkbox
+if st.checkbox('Show Raw Data'):
+    with st.echo():  # This will show the code block in the app
+        try:
+            clf.fit(X_train, y_train)
+            y_pred = clf.predict(X_test)
+            acc = accuracy_score(y_test, y_pred)
+            
+            # Display results
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.metric("Accuracy", f"{acc:.2%}")
+                st.write("Classification Report:")
+                st.text(classification_report(y_test, y_pred))
+            
+            with col2:
+                st.write("Confusion Matrix:")
+                cm = confusion_matrix(y_test, y_pred)
+                fig, ax = plt.subplots()
+                sns.heatmap(cm, annot=True, fmt='d', ax=ax)
+                st.pyplot(fig)
+        except Exception as e:
+            st.error(f"Training failed: {str(e)}")
+
+
+
 clf = get_classifier(model, param)
 
 # Train-test split
